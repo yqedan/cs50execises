@@ -34,12 +34,12 @@ int main(int argc, string argv[]){
         if(i == 99170){
             break;
         }
-        i++;
         guess = crypt(words[i],salt);
         if(strcmp(encPwd,guess) == 0){
             found = 1;
             break;
         }
+        i++;
     }
     if(found == 1){
         printf("%s",words[i]);
