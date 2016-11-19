@@ -10,40 +10,43 @@ int main(int argc, string argv[]){
         return 1;
     }
     FILE *fp = fopen("/usr/share/dict/words", "r");
-    char words[99170][29];
-    char ch;
-    string encPwd = argv[1];
-    int i = 0;
-    int found = 0;
-    string guess;
-    int w = 0; //word index
-    int c = 0; //character index
-    char salt[2];
-    strncpy(salt, argv[1], 2);
+    char words[99170][29];      //used to hold words for word lookup
+    string encPwd = argv[1];    //encoded password
+    int found = 0;              //keeps track if password was found or not
+    string guess;               //passowrd guesses
+    int w = 0;                  //word index
+    int c = 0;                  //character index
+    char salt[2];               //the salt
+    strncpy(salt, argv[1], 2);  //salt is just first 2 characters of encrypted password
+    char test[9];               //Used to store brute force word
+    
+    //open file of words and store them in large words array
+    char a;
     do{
-        ch = getc(fp);
-        words[w][c] = ch;
+        a = getc(fp);
+        words[w][c] = a;
         c++;
-        if(ch == '\n'){
+        if(a == '\n'){
             c = 0;
             w++;
         }
-    }while(ch != EOF);
+    }while(a != EOF);
     fclose(fp);
+    
+    //word lookup
+    int i = 0;
     while(true){
         if(i == 99170){
             break;
         }
         guess = crypt(words[i],salt);
         if(strcmp(encPwd,guess) == 0){
-            found = 2;
+            found = 1;
             break;
         }
         i++;
     }
     
-    char a;
-    char test[9];
     //1 character
     if(found == 0){
         for(int j = 0;j < 95;j++){
@@ -51,7 +54,7 @@ int main(int argc, string argv[]){
             test[0] = a;
             guess = crypt(test,salt);
             if(strcmp(encPwd,guess) == 0){
-                found = 1;
+                found = 2;
                 break;
             }
         }
@@ -67,11 +70,11 @@ int main(int argc, string argv[]){
                 test[1] = a;
                 guess = crypt(test,salt);
                 if(strcmp(encPwd,guess) == 0){
-                    found = 1;
+                    found = 2;
                     break;
                 }
             }
-            if(found == 1){
+            if(found == 2){
                 break;
             }
         }
@@ -90,15 +93,15 @@ int main(int argc, string argv[]){
                     test[2] = a;
                     guess = crypt(test,salt);
                     if(strcmp(encPwd,guess) == 0){
-                        found = 1;
+                        found = 2;
                         break;
                     }
                 }
-                if(found == 1){
+                if(found == 2){
                     break;
                 }
             }
-            if(found == 1){
+            if(found == 2){
                 break;
             }
         }
@@ -120,23 +123,25 @@ int main(int argc, string argv[]){
                         test[3] = a;
                         guess = crypt(test,salt);
                         if(strcmp(encPwd,guess) == 0){
-                            found = 1;
+                            found = 2;
                             break;
                         }
                     }
-                    if(found == 1){
+                    if(found == 2){
                         break;
                     }
                 }
-                if(found == 1){
+                if(found == 2){
                     break;
                 }
             }
-            if(found == 1){
+            if(found == 2){
                 break;
             }
         }
     }
+    
+    //will take hours to run and not worth the time
     
     //5 characters
     // if(found == 0){
@@ -157,32 +162,32 @@ int main(int argc, string argv[]){
     //                         test[4] = a;
     //                         guess = crypt(test,salt);
     //                         if(strcmp(encPwd,guess) == 0){
-    //                             found = 1;
+    //                             found = 2;
     //                             break;
     //                         }
     //                     }
-    //                     if(found == 1){
+    //                     if(found == 2){
     //                         break;
     //                     }
     //                 }
-    //                 if(found == 1){
+    //                 if(found == 2){
     //                     break;
     //                 }
     //             }
-    //             if(found == 1){
+    //             if(found == 2){
     //                 break;
     //             }
     //         }
-    //         if(found == 1){
+    //         if(found == 2){
     //             break;
     //         }
     //     }
     // }
     
     if(found == 1){
-        printf("%s\n",test);
-    }else if(found == 2){
         printf("%s",words[i]);
+    }else if(found == 2){
+        printf("%s\n",test);
     }else if (found == 0){
         printf("Password is too strong\n");
     }
