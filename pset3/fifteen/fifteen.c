@@ -185,7 +185,23 @@ void init(void)
  */
 void draw(void)
 {
-    //TODO
+    for(int row = 0; row < d ; row++)
+    {
+        for(int col = 0; col < d ; col++)
+        {   
+            if(board[row][col] < 10){
+                if(board[row][col] == 0){
+                    printf(" %c ",'_');
+                }else{
+                    printf(" %i ",board[row][col]);
+                }
+            }
+            else{
+                printf("%i ",board[row][col]);
+            }
+        }
+         printf("\n\n");
+    }
 }
 
 /**
