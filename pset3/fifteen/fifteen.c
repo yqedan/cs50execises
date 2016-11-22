@@ -159,7 +159,25 @@ void greet(void)
  */
 void init(void)
 {
-    // TODO
+    int x = d * d - 1;
+    for(int row = 0; row < d ; row++)
+    {
+        for(int col = 0; col < d ; col++)
+        {   
+            if(d % 2 == 0 && x == 1 ){
+                board[row][col] = 2;
+                x--;
+            }
+            else if(d % 2 == 0 && x == 2 ){
+                board[row][col] = 1;
+                x--;
+            }
+            else{
+                board[row][col] = x;
+                x--;
+            }
+        }
+    }
 }
 
 /**
@@ -167,7 +185,7 @@ void init(void)
  */
 void draw(void)
 {
-    // TODO
+    //TODO
 }
 
 /**
