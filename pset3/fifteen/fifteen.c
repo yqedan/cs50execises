@@ -279,6 +279,32 @@ bool move(int tile)
  */
 bool won(void)
 {
-    // TODO
-    return false;
+    bool won = true;
+    for(int row = 0; row < d ; row++)
+    {
+        for(int col = 0; col < d ; col++)
+        {
+            if(row == (d-1) && col == (d-1))    //special case for last tile that must be 0
+            {   
+                if(board[row][col] != 0)
+                {
+                    won = false;
+                    break;  //quit looping if it is already proven the player did not win
+                }
+            }
+            else
+            {
+                if(board[row][col] != (row * d + col + 1))  //all other tiles must equal this number calculated here
+                {
+                    won = false;
+                    break;  //quit looping if it is already proven the player did not win
+                }
+            }
+        }
+        if(!won)    //quit looping if it is already proven the player did not win
+        {
+            break;
+        }
+    }
+    return won;
 }
