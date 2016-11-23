@@ -21,13 +21,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <time.h>
 
 // constants
-#define DIM_MIN 3
+#define DIM_MIN 1
 #define DIM_MAX 9
 
 // board
 int board[DIM_MAX][DIM_MAX];
+
+// god mode
+bool godMode = false;
 
 // dimensions
 int d;
@@ -37,8 +42,9 @@ void clear(void);
 void greet(void);
 void init(void);
 void draw(void);
-bool move(int tile);
+bool move(string tile);
 bool won(void);
+int godMove();
 
 int main(int argc, string argv[])
 {
@@ -101,30 +107,41 @@ int main(int argc, string argv[])
             printf("ftw!\n");
             break;
         }
-
-        // prompt for move
-        printf("Tile to move: ");
-        int tile = GetInt();
+        char* tile = NULL;
+        if(godMode)
+        {
+            //make move
+            tile = malloc(sizeof(char));
+            int tileInt = godMove();
+            sprintf(tile, "%d", tileInt);
+        }
+        else
+        {
+            // prompt for move
+            printf("Tile to move: ");
+            tile = GetString();
+        }
         
         // quit if user inputs 0 (for testing)
-        if (tile == 0)
+        if (strcmp(tile,"0") == 0)
         {
             break;
         }
 
         // log move (for testing)
-        fprintf(file, "%i\n", tile);
+        fprintf(file, "%s\n", tile);
         fflush(file);
 
         // move if possible, else report illegality
         if (!move(tile))
         {
-            printf("\nIllegal move.\n");
+            printf("\n%s is an Illegal move.\n",tile);
             usleep(500000);
         }
 
         // sleep thread for animation's sake
         usleep(500000);
+        free(tile);
     }
     
     // close log
@@ -181,6 +198,16 @@ void init(void)
             }
         }
     }
+    //random moves are below
+    srand48((long int) time(NULL));
+    int tileInt = 0;
+    char tile[1];
+    for(int i = 0; i < 100000; i++)
+    {
+        tileInt = (int) (drand48() * d * d);
+        sprintf(tile, "%d", tileInt);
+        move(tile);
+    }
 }
 
 /**
@@ -216,9 +243,14 @@ void draw(void)
  * If tile borders empty space, moves tile and returns true, else
  * returns false. 
  */
-bool move(int tile)
+bool move(string tileString)
 {
-    // TODO
+    if(strcmp(tileString,"GOD") == 0)
+    {
+        godMode = true;
+        return true;
+    }
+    int tile = atoi(tileString);
     int row;
     int col;
     bool found = false;
@@ -243,22 +275,22 @@ bool move(int tile)
     {
         if(row > 0 && board[row-1][col] == 0)           //above
         {
-            printf("moving above");
+            //printf("moving above");
             board[row-1][col] = tile;
         }
         else if(col < (d-1) && board[row][col+1] == 0)  //right
         {
-            printf("moving right");
+            //printf("moving right");
             board[row][col+1] = tile;
         }
         else if(row < (d-1) && board[row+1][col] == 0)  //below
         {    
-            printf("moving below");
+            //printf("moving below");
             board[row+1][col] = tile;
         }
         else if(col > 0 && board[row][col-1] == 0)     //left
         {
-            printf("moving left");
+            //printf("moving left");
             board[row][col-1] = tile;
         }
         else{
@@ -307,4 +339,10 @@ bool won(void)
         }
     }
     return won;
+}
+
+int godMove()
+{
+    //god mode code will go here
+    return (int) (drand48() * (d * d - 1)) + 1;
 }
