@@ -164,15 +164,18 @@ void init(void)
     {
         for(int col = 0; col < d ; col++)
         {   
-            if(d % 2 == 0 && x == 1 ){
+            if(d % 2 == 0 && x == 1 )
+            {
                 board[row][col] = 2;
                 x--;
             }
-            else if(d % 2 == 0 && x == 2 ){
+            else if(d % 2 == 0 && x == 2 )
+            {
                 board[row][col] = 1;
                 x--;
             }
-            else{
+            else
+            {
                 board[row][col] = x;
                 x--;
             }
@@ -189,14 +192,19 @@ void draw(void)
     {
         for(int col = 0; col < d ; col++)
         {   
-            if(board[row][col] < 10){
-                if(board[row][col] == 0){
+            if(board[row][col] < 10)
+            {
+                if(board[row][col] == 0)
+                {
                     printf(" %c ",'_');
-                }else{
+                }
+                else
+                {
                     printf(" %i ",board[row][col]);
                 }
             }
-            else{
+            else
+            {
                 printf("%i ",board[row][col]);
             }
         }
@@ -211,7 +219,58 @@ void draw(void)
 bool move(int tile)
 {
     // TODO
-    return false;
+    int row;
+    int col;
+    bool found = false;
+    
+    for(row = 0; row < d ; row++)
+    {
+        for(col = 0; col < d ; col++)
+        {  
+            if(board[row][col] == tile) //locate row and column of tile user entered
+            {
+                found = true;
+                break;
+            }
+        }
+        if(found)
+        {
+            break;
+        }
+    }
+    
+    if(found)
+    {
+        if(row > 0 && board[row-1][col] == 0)           //above
+        {
+            printf("moving above");
+            board[row-1][col] = tile;
+        }
+        else if(col < (d-1) && board[row][col+1] == 0)  //right
+        {
+            printf("moving right");
+            board[row][col+1] = tile;
+        }
+        else if(row < (d-1) && board[row+1][col] == 0)  //below
+        {    
+            printf("moving below");
+            board[row+1][col] = tile;
+        }
+        else if(col > 0 && board[row][col-1] == 0)     //left
+        {
+            printf("moving left");
+            board[row][col-1] = tile;
+        }
+        else{
+            return false;
+        }
+        board[row][col] = 0;    //zero out previous space
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /**
