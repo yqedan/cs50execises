@@ -205,7 +205,7 @@ void init(void)
     for(int i = 0; i < 100000; i++)
     {
         tileInt = (int) (drand48() * d * d);
-        sprintf(tile, "%d", tileInt);
+        sprintf(tile, "%d", tileInt);   //convert integer into a string
         move(tile);
     }
 }

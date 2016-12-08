@@ -50,7 +50,7 @@ bool binarySearch(int value, int values[], int n)
     else{
         bool rv;
         int half = n/2;
-        // printf("half is %d\n",half);
+        //printf("half is %d\n",half);
         int odd = 0;
         if(n % 2 == 1){
             odd++;
@@ -58,31 +58,23 @@ bool binarySearch(int value, int values[], int n)
         }
         int* subset;
         if(value < values[half]){
-            subset = malloc((half)*sizeof(int));
-            // printf("reading left indexes %d - %d\n",0,half-1);
-            for(int i = 0; i < half; i++){
-               subset[i] = values[i];
-            }
+            subset = values;
+            // printf("reading left indexes %d - %d\n",0,half-1); }
             // printf("subset list is: \n");
             // for(int i = 0; i < half; i++){
             //   printf("#%d in the list: %d\n",i,subset[i]);
             // }
             rv = binarySearch(value, subset, half);
-            free(subset);
             return rv;
         }
         else{
-            subset = malloc((half + odd)*sizeof(int));
+            subset = values + (half + odd);
             // printf("reading right indexes %d - %d\n",half,n-1);
-            for(int i = half; i < (n + odd); i++){
-               subset[i-half] = values[i];
-            }
             // printf("subset list is: \n");
             // for(int i = 0; i < (half + odd); i++){
             //   printf("#%d in the list: %d\n",i,subset[i]);
             // }
             rv = binarySearch(value, subset, (half + odd));
-            free(subset);
             return rv;
         }
     }
@@ -107,9 +99,9 @@ void sort(int values[], int n)
             }
         }
     }
-    
-    // for(int i = 0; i < n; i++){
-    //     printf("#%d in the list: %d\n",i,values[i]);
-    // }
+    printf("The sorted list is:\n");
+    for(int i = 0; i < n; i++){
+        printf("#%d in the list: %d\n",i,values[i]);
+    }
     return;
 }
